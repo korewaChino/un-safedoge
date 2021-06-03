@@ -20,9 +20,6 @@ from  random import randint
 import sys
 from selenium.common.exceptions import NoSuchElementException
 from function.web import *
-
-with open ('config.json') as config_file:
-    config = json.load(config_file)
     
 path = os.getcwd()+'\\'
 options = Options()
