@@ -75,9 +75,13 @@ try:
                     balance = driver.find_element(By.XPATH, "/html/body/section[1]/div/div/div[1]/div/h3/input").get_attribute("value")
                     
                 except NoSuchElementException:
-                    driver.find_element(By.CSS_SELECTOR, "#username").send_keys(obj, Keys.RETURN)
-                    WebDriverWait.until(driver.find_element(By.XPATH, "/html/body/section[1]/div/div/div[1]/div/h3/input").get_attribute("value"))
-                    balance = driver.find_element(By.XPATH, "/html/body/section[1]/div/div/div[1]/div/h3/input").get_attribute("value")
+                    try:
+                        driver.find_element(By.CSS_SELECTOR, "#username").send_keys(obj, Keys.RETURN)
+                        WebDriverWait.until(driver.find_element(By.XPATH, "/html/body/section[1]/div/div/div[1]/div/h3/input").get_attribute("value"))
+                        balance = driver.find_element(By.XPATH, "/html/body/section[1]/div/div/div[1]/div/h3/input").get_attribute("value")
+                    except:
+                        balance = '???'
+                        pass
                     
                 finally:
                         try:
