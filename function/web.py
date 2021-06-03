@@ -19,8 +19,8 @@ from  random import randint
 import sys
 from selenium.common.exceptions import NoSuchElementException
 path = os.getcwd()+'\\'
-with open ('././config.json') as config_file:
-    config = json.load(config_file)
+"""with open ('././config.json') as config_file:
+    config = json.load(config_file)"""
 options = Options()
 useragent = 'User-Agent=' + generate_user_agent(navigator=["chrome", "firefox"])
 arguments = [
