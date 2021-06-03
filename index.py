@@ -71,13 +71,15 @@ try:
                 try:
                     
                     #WebDriverWait.until(driver.find_element(By.XPATH, "/html/body/section[1]/div/div/div[1]/div/h3/input").get_attribute("value"))
-                    driver.find_element(By.XPATH, "/html/body/section[1]/div/div/div[1]/div/h3/input").get_attribute("value")
+                    driver.find_element(By.XPATH, "/html/body/section[1]/div/div/div[1]/div/h3/input").get_attribute("value")                    
                     balance = driver.find_element(By.XPATH, "/html/body/section[1]/div/div/div[1]/div/h3/input").get_attribute("value")
                     
-                except NoSuchElementException:
+                except:
                     try:
-                        driver.find_element(By.CSS_SELECTOR, "#username").send_keys(obj, Keys.RETURN)
+                        if driver.find_element(By.CSS_SELECTOR, "#username").is_displayed():
+                            driver.find_element(By.CSS_SELECTOR, "#username").send_keys(obj, Keys.RETURN)
                         WebDriverWait.until(driver.find_element(By.XPATH, "/html/body/section[1]/div/div/div[1]/div/h3/input").get_attribute("value"))
+                        time.sleep(0.5)
                         balance = driver.find_element(By.XPATH, "/html/body/section[1]/div/div/div[1]/div/h3/input").get_attribute("value")
                     except:
                         balance = '???'
@@ -106,6 +108,8 @@ except:
     driver.get('https://safedoge.xyz/logout.php')
     test()
     pass
+finally:
+    print('done!')
         
     
     
