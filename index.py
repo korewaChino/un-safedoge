@@ -30,7 +30,7 @@ arguments = [
         '--no-sandbox',
         useragent,
         '--disable-dev-shm-usage',
-
+        '--headless'
         '--log-level=3'
         '--remote-debugging-port=9222'
         
