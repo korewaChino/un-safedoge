@@ -28,9 +28,9 @@ options = Options()
 useragent = 'User-Agent=' + generate_user_agent(navigator=["chrome", "firefox"])
 arguments = [
         '--no-sandbox',
+        '--headless',
         useragent,
         '--disable-dev-shm-usage',
-        '--headless'
         '--log-level=3'
         '--remote-debugging-port=9222'
         
@@ -57,10 +57,10 @@ else:
 with open('wallets.txt') as w:
     wallet_addresses = list(w)
 
-
+driver = webdriver.Chrome(options=options, executable_path=execpath)
 
 try:
-    driver = webdriver.Chrome(options=options, executable_path=execpath)
+    
     for obj in wallet_addresses:
         try:
             def test():
