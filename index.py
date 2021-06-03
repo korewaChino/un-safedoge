@@ -12,6 +12,7 @@ from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.webdriver.support import expected_conditions as EC
 import time
 import os
 import platform
@@ -29,16 +30,18 @@ arguments = [
         '--no-sandbox',
         useragent,
         '--disable-dev-shm-usage',
-        '--headless',
+
         '--log-level=3'
+        '--remote-debugging-port=9222'
         
 ]
 seperator = '\n'
 for obj in arguments: #Load every launch argument
      options.add_argument(obj)
 options.add_argument(path)
+options.add_argument("--user-data-dir=" + path + "/UserData/")
 
-driver = webdriver.Chrome(options=options, executable_path=execpath)
+#driver = webdriver.Chrome(options=options, executable_path=execpath)
 if platform.system() == 'Windows':
     execpath = "./chromedriver.exe"
 #macOS
@@ -57,18 +60,32 @@ with open('wallets.txt') as w:
 
 
 try:
+    driver = webdriver.Chrome(options=options, executable_path=execpath)
     for obj in wallet_addresses:
         try:
             def test():
                 driver.get('https://safedoge.xyz/index.php')
+                #WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#username")))
                 driver.find_element(By.CSS_SELECTOR, "#username").send_keys(obj, Keys.RETURN)
+                #driver.find_element(By.CSS_SELECTOR, "#username").send_keys(obj, Keys.RETURN)
                 try:
+                    
+                    #WebDriverWait.until(driver.find_element(By.XPATH, "/html/body/section[1]/div/div/div[1]/div/h3/input").get_attribute("value"))
+                    driver.find_element(By.XPATH, "/html/body/section[1]/div/div/div[1]/div/h3/input").get_attribute("value")
                     balance = driver.find_element(By.XPATH, "/html/body/section[1]/div/div/div[1]/div/h3/input").get_attribute("value")
-                except:
+                    
+                except NoSuchElementException:
+                    driver.find_element(By.CSS_SELECTOR, "#username").send_keys(obj, Keys.RETURN)
+                    WebDriverWait.until(driver.find_element(By.XPATH, "/html/body/section[1]/div/div/div[1]/div/h3/input").get_attribute("value"))
                     balance = driver.find_element(By.XPATH, "/html/body/section[1]/div/div/div[1]/div/h3/input").get_attribute("value")
-                    pass
-                print("Balance: for Address " + obj + ": " + balance + " DOGE")
-                driver.get('https://safedoge.xyz/logout.php')
+                    
+                finally:
+                        try:
+                            print("Balance for Address " + obj.rstrip("\n") + ": " + balance + " DOGE")
+                            driver.get('https://safedoge.xyz/logout.php')
+                        except TypeError:
+                            print('unable to get balance!')
+                            driver.get('https://safedoge.xyz/logout.php')
         except NoSuchElementException:
             driver.get('https://safedoge.xyz/logout.php')
             test()
@@ -82,6 +99,7 @@ try:
             test()
             pass
 except:
+    driver.get('https://safedoge.xyz/logout.php')
     test()
     pass
         
